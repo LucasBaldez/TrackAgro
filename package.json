@@ -1,0 +1,9 @@
+{
+  "name": "trackagro-root",
+  "version": "1.0.0",
+  "scripts": {
+    "backend": "cd backend && npm run dev",
+    "frontend": "cd frontend && npm run dev",
+    "dev": "echo 'Por favor, abra dois terminais: um para \"npm run backend\" e outro para \"npm run frontend\"'"
+  }
+}
