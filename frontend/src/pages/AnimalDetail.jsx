@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import { 
   ArrowLeft, Edit2, Beef, Calendar, Activity, 
@@ -32,22 +32,29 @@ const HistoryCard = ({ title, icon: Icon, children, onAdd }) => (
 
 const AnimalDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [animal, setAnimal] = useState(null);
   const [vaccines, setVaccines] = useState([]);
   const [diseases, setDiseases] = useState([]);
+  const [repro, setRepro] = useState([]);
+  const [movements, setMovements] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [animalRes, vaccinesRes, diseasesRes] = await Promise.all([
+        const [animalRes, vaccinesRes, diseasesRes, reproRes, movementsRes] = await Promise.all([
           api.get(`/animals/${id}`),
           api.get(`/vaccines/animal/${id}`),
           api.get(`/diseases/animal/${id}`),
+          api.get(`/reproduction/animal/${id}`),
+          api.get(`/movements/animal/${id}`),
         ]);
         setAnimal(animalRes.data);
         setVaccines(vaccinesRes.data);
         setDiseases(diseasesRes.data);
+        setRepro(reproRes.data);
+        setMovements(movementsRes.data);
       } catch (error) {
         console.error(error);
       } finally {
@@ -123,8 +130,52 @@ const AnimalDetail = () => {
 
           {/* Histórico e Registros */}
           <div className="md:col-span-3 grid md:grid-cols-2 gap-8">
+            {/* Reprodução */}
+            <HistoryCard 
+              title="Reprodução" 
+              icon={Heart}
+              onAdd={() => navigate(`/animais/${animal.id}/reproducao`)}
+            >
+              {repro.length > 0 ? repro.map(r => (
+                <div key={r._id} className="p-4 bg-gray-50 rounded-2xl flex items-center justify-between group hover:bg-white hover:shadow-md transition-all border border-transparent hover:border-gray-100">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-pink-600 font-black shadow-sm group-hover:scale-110 transition-transform">R</div>
+                    <div>
+                      <h4 className="text-sm font-bold text-gray-900 uppercase tracking-tight">{r.type}</h4>
+                      <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">{new Date(r.date).toLocaleDateString()} - {r.status}</p>
+                    </div>
+                  </div>
+                  <CheckCircle2 className="w-5 h-5 text-pink-600" />
+                </div>
+              )) : <p className="text-sm text-gray-400 font-medium italic">Nenhum registro de reprodução.</p>}
+            </HistoryCard>
+
+            {/* Movimentação */}
+            <HistoryCard 
+              title="Movimentação" 
+              icon={ArrowLeftRight}
+              onAdd={() => navigate(`/animais/${animal.id}/movimentar`)}
+            >
+              {movements.length > 0 ? movements.map(m => (
+                <div key={m._id} className="p-4 bg-gray-50 rounded-2xl flex items-center justify-between group hover:bg-white hover:shadow-md transition-all border border-transparent hover:border-gray-100">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-earth-600 font-black shadow-sm group-hover:scale-110 transition-transform">M</div>
+                    <div>
+                      <h4 className="text-sm font-bold text-gray-900 uppercase tracking-tight">{m.to}</h4>
+                      <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">{new Date(m.date).toLocaleDateString()} - {m.reason}</p>
+                    </div>
+                  </div>
+                  <ExternalLink className="w-5 h-5 text-earth-600" />
+                </div>
+              )) : <p className="text-sm text-gray-400 font-medium italic">Nenhum registro de movimentação.</p>}
+            </HistoryCard>
+
             {/* Vacinas */}
-            <HistoryCard title="Vacinas" icon={Calendar}>
+            <HistoryCard 
+              title="Vacinas" 
+              icon={Calendar} 
+              onAdd={() => navigate(`/animais/${animal.id}/vacinar`)}
+            >
               {vaccines.length > 0 ? vaccines.map(v => (
                 <div key={v._id} className="p-4 bg-gray-50 rounded-2xl flex items-center justify-between group hover:bg-white hover:shadow-md transition-all border border-transparent hover:border-gray-100">
                   <div className="flex items-center gap-4">
@@ -140,7 +191,11 @@ const AnimalDetail = () => {
             </HistoryCard>
 
             {/* Doenças / Tratamentos */}
-            <HistoryCard title="Saúde & Doenças" icon={Activity}>
+            <HistoryCard 
+              title="Saúde & Doenças" 
+              icon={Activity}
+              onAdd={() => navigate(`/animais/${animal.id}/diagnosticar`)}
+            >
               {diseases.length > 0 ? diseases.map(d => (
                 <div key={d._id} className="p-4 bg-gray-50 rounded-2xl flex items-center justify-between group hover:bg-white hover:shadow-md transition-all border border-transparent hover:border-gray-100">
                   <div className="flex items-center gap-4">

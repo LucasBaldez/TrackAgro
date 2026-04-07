@@ -25,7 +25,7 @@ const Animal = sequelize.define('Animal', {
     allowNull: false,
   },
   sex: {
-    type: DataTypes.ENUM('Macho', 'Fêmea', 'M', 'F'),
+    type: DataTypes.STRING,
     allowNull: false,
   },
   breed: {
@@ -37,7 +37,7 @@ const Animal = sequelize.define('Animal', {
     allowNull: false,
   },
   status: {
-    type: DataTypes.ENUM('Ativo', 'Vendido', 'Morto'),
+    type: DataTypes.STRING,
     defaultValue: 'Ativo',
   },
   photo: {

@@ -21,6 +21,22 @@ const Vaccine = sequelize.define('Vaccine', {
   batch: {
     type: DataTypes.STRING,
   },
+  dosage: {
+    type: DataTypes.STRING, // e.g., "5ml", "2cc"
+  },
+  route: {
+    type: DataTypes.STRING,
+    defaultValue: 'Subcutânea',
+  },
+  manufacturer: {
+    type: DataTypes.STRING,
+  },
+  expiryDate: {
+    type: DataTypes.DATE,
+  },
+  veterinarian: {
+    type: DataTypes.STRING,
+  },
   observations: {
     type: DataTypes.TEXT,
   },

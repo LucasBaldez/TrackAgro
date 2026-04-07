@@ -8,6 +8,10 @@ import Dashboard from './pages/Dashboard'
 import AnimalList from './pages/AnimalList'
 import AnimalForm from './pages/AnimalForm'
 import AnimalDetail from './pages/AnimalDetail'
+import VaccineForm from './pages/VaccineForm'
+import DiseaseForm from './pages/DiseaseForm'
+import ReproductionForm from './pages/ReproductionForm'
+import MovementForm from './pages/MovementForm'
 
 function App() {
   return (
@@ -22,6 +26,10 @@ function App() {
           <Route path="/animais/novo" element={<AnimalForm />} />
           <Route path="/animais/editar/:id" element={<AnimalForm />} />
           <Route path="/animais/:id" element={<AnimalDetail />} />
+          <Route path="/animais/:id/vacinar" element={<VaccineForm />} />
+          <Route path="/animais/:id/diagnosticar" element={<DiseaseForm />} />
+          <Route path="/animais/:id/reproducao" element={<ReproductionForm />} />
+          <Route path="/animais/:id/movimentar" element={<MovementForm />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" />} />

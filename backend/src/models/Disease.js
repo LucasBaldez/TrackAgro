@@ -8,7 +8,7 @@ const Disease = sequelize.define('Disease', {
     primaryKey: true,
   },
   type: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING, // e.g., "Mastite", "Tristeza Parasitária"
     allowNull: false,
   },
   diagnosisDate: {
@@ -22,12 +22,22 @@ const Disease = sequelize.define('Disease', {
   medication: {
     type: DataTypes.STRING,
   },
+  dosage: {
+    type: DataTypes.STRING,
+  },
+  route: {
+    type: DataTypes.STRING,
+    defaultValue: 'Intramuscular',
+  },
   vet: {
     type: DataTypes.STRING,
   },
   status: {
-    type: DataTypes.ENUM('Em tratamento', 'Curado', 'Crítico'),
+    type: DataTypes.STRING,
     defaultValue: 'Em tratamento',
+  },
+  observations: {
+    type: DataTypes.TEXT,
   },
 });
 
